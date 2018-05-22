@@ -2,20 +2,38 @@ package cmd
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/YusukeIwaki/appetize-cli/appetize"
+	"github.com/pkg/errors"
 )
 
 // uploadCmd represents the upload command
 var uploadCmd = &cobra.Command{
 	Use:   "upload",
 	Short: "Direct file uploads",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("upload called")
-		fmt.Println(args)
-		fmt.Println(viper.GetString("platform"))
-		fmt.Println(viper.GetString("api_token"))
+	RunE: func(cmd *cobra.Command, args []string) error {
+		client := appetize.Client{
+			ApiToken: viper.GetString("api_token"),
+		}
+		filePath, err := filepath.Abs(strings.Join(args, " "))
+		if err != nil {
+			return errors.Wrap(err, fmt.Sprintf("failed to get absolute path for filepath=%s", filePath))
+		}
+		options := appetize.UploadOptions{
+			Platform:    viper.GetString("platform"),
+			AbsFilePath: filePath,
+		}
+		uploadResponse, err := client.Upload(options)
+		if err != nil {
+			return errors.Wrap(err, "failed to upload file")
+		}
+		fmt.Println(uploadResponse.PublicKey)
+		return nil
 	},
 }
 
