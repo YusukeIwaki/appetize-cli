@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
-	"net/http"
 	"os"
 	"time"
 
@@ -27,27 +26,26 @@ type UploadResponse struct {
 }
 
 // ref: https://appetize.io/docs#direct-uploads
-func (client Client) Upload(options UploadOptions) (response *UploadResponse, err error) {
+func (client Client) Upload(options UploadOptions) (*UploadResponse, error) {
 	fp, err := os.Open(options.AbsFilePath)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf("failed to open file: %s", options.AbsFilePath))
 	}
 	defer fp.Close()
 
-	url := fmt.Sprintf("https://%s@api.appetize.io/v1/apps", client.ApiToken)
 	body := &bytes.Buffer{}
 	contentType, err := writeMultipart(body, options.Platform, options.AbsFilePath, fp)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to write Multipart")
 	}
-	req, err := http.NewRequest("POST", url, body)
+
+	req, err := client.NewApiRequest("POST", "/v1/apps", body)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create Request")
 	}
 	req.Header.Add("Content-Type", contentType)
 
-	httpClient := &http.Client{}
-	res, err := httpClient.Do(req)
+	res, err := client.HandleHttpRequest(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to connect")
 	}
