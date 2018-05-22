@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.8
+    working_directory: /go/src/github.com/YusukeIwaki/appetize-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            go get github.com/mitchellh/go-homedir
+            go get github.com/spf13/cobra
+            go get github.com/spf13/viper
+      - run:
+          name: Build for amd64
+          command: |
+            mkdir -p out/binary-amd64
+            GOOS=linux GOARCH=amd64 go build -o out/binary-amd64/appetize main.go
+      - store_artifacts:
+          path: out/binary-amd64
