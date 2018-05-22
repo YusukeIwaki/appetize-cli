@@ -13,9 +13,15 @@ jobs:
             go get github.com/spf13/cobra
             go get github.com/spf13/viper
       - run:
-          name: Build for amd64
+          name: Build for darwin/amd64
           command: |
-            mkdir -p out/binary-amd64
-            GOOS=linux GOARCH=amd64 go build -o out/binary-amd64/appetize main.go
+            mkdir -p out/binary/darwin
+            GOOS=darwin GOARCH=amd64 go build -o out/binary/darwin/appetize main.go
+      - run:
+          name: Build for linux/amd64
+          command: |
+            mkdir -p out/binary/amd64
+            GOOS=linux GOARCH=amd64 go build -o out/binary/amd64/appetize main.go
       - store_artifacts:
-          path: out/binary-amd64
+          path: out/binary
+          destination: binary
