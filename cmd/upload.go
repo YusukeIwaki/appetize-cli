@@ -1,50 +1,46 @@
-// Copyright © 2018 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package cmd
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/YusukeIwaki/appetize-cli/appetize"
+	"github.com/pkg/errors"
 )
 
 // uploadCmd represents the upload command
 var uploadCmd = &cobra.Command{
 	Use:   "upload",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("upload called")
+	Short: "Direct file uploads",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		client := appetize.Client{
+			ApiToken: viper.GetString("api_token"),
+		}
+		filePath, err := filepath.Abs(strings.Join(args, " "))
+		if err != nil {
+			return errors.Wrap(err, fmt.Sprintf("failed to get absolute path for filepath=%s", filePath))
+		}
+		options := appetize.UploadOptions{
+			Platform:    viper.GetString("platform"),
+			AbsFilePath: filePath,
+		}
+		uploadResponse, err := client.Upload(options)
+		if err != nil {
+			return errors.Wrap(err, "failed to upload file")
+		}
+		fmt.Println(uploadResponse.PublicKey)
+		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(uploadCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// uploadCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// uploadCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// platform
+	uploadCmd.PersistentFlags().String("platform", "", "'ios' or 'android'")
+	viper.BindPFlag("platform", uploadCmd.PersistentFlags().Lookup("platform"))
 }
