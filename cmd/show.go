@@ -1,50 +1,48 @@
-// Copyright © 2018 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package cmd
 
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/YusukeIwaki/appetize-cli/appetize"
+	"github.com/pkg/errors"
 )
 
 // showCmd represents the show command
 var showCmd = &cobra.Command{
 	Use:   "show",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("show called")
+	Short: "Retrieve information for a single app",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		client := appetize.Client{
+			ApiToken: viper.GetString("api_token"),
+		}
+		options := appetize.ShowOptions{
+			PublicKey: args[0],
+		}
+		showResponse, err := client.ShowApp(options)
+		if err != nil {
+			return errors.Wrap(err, "failed to show app")
+		}
+		fmt.Printf("PublicKey:\t%s\n", showResponse.PublicKey)
+		fmt.Printf("Created:\t%s\n", showResponse.Created)
+		fmt.Printf("Updated:\t%s\n", showResponse.Updated)
+		fmt.Printf("Disabled:\t%t\n", showResponse.Disabled)
+		fmt.Printf("Platform:\t%s\n", showResponse.Platform)
+		fmt.Printf("VersionCode:\t%d\n", showResponse.VersionCode)
+		fmt.Printf("Bundle:\t%s\n", showResponse.Bundle)
+		fmt.Printf("Name:\t%s\n", showResponse.Name)
+		fmt.Printf("Note:\t%s\n", showResponse.Note)
+		fmt.Printf("AppVersionName:\t%s\n", showResponse.AppVersionName)
+		fmt.Printf("AppVersionCode:\t%s\n", showResponse.AppVersionCode)
+		fmt.Printf("IconUrl:\t%s\n", showResponse.IconUrl)
+		fmt.Printf("ViewUrl:\t%s\n", showResponse.ViewUrl())
+		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(showCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// showCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// showCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

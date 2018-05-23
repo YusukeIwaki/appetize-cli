@@ -15,6 +15,7 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Listing apps",
 	Long:  "Listing apps\n\nREMARK: handling hasMore/nextKey is not supported yet :(",
+	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		client := appetize.Client{
 			ApiToken: viper.GetString("api_token"),
