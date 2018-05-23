@@ -12,7 +12,7 @@ type Client struct {
 
 func (client *Client) NewApiRequest(method string, endpoint string, body io.Reader) (*http.Request, error) {
 	url := fmt.Sprintf("https://%s@api.appetize.io%s", client.ApiToken, endpoint)
-	return http.NewRequest("POST", url, body)
+	return http.NewRequest(method, url, body)
 }
 
 func (client *Client) HandleHttpRequest(req *http.Request) (*http.Response, error) {

@@ -14,24 +14,23 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Listing apps",
+	Long:  "Listing apps\n\nREMARK: handling hasMore/nextKey is not supported yet :(",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		client := appetize.Client{
 			ApiToken: viper.GetString("api_token"),
 		}
-		optionsKey, _ := cmd.Flags().GetString("key")
-		options := appetize.ListOptions{
-			Key: optionsKey,
-		}
+		options := appetize.ListOptions{}
 		listResponse, err := client.ListApps(options)
 		if err != nil {
 			return errors.Wrap(err, "failed to list apps")
 		}
-		fmt.Println(listResponse)
+		for _, data := range listResponse.Data {
+			fmt.Printf("data:\t%s\t%s\n", data.PublicKey, data.Created)
+		}
 		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-	listCmd.Flags().StringP("key", "", "", "nextKey from previous request.")
 }

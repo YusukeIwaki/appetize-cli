@@ -7,7 +7,6 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
-	"time"
 
 	"github.com/pkg/errors"
 )
@@ -17,13 +16,7 @@ type UploadOptions struct {
 	Platform    string
 }
 
-type UploadResponse struct {
-	PublicKey   string    `json:publicKey`
-	Created     time.Time `json:created`
-	Updated     time.Time `json:updated`
-	Platform    string    `json:platform`
-	VersionCode int       `json:versionCode`
-}
+type UploadResponse AppItem
 
 // ref: https://appetize.io/docs#direct-uploads
 func (client Client) Upload(options UploadOptions) (*UploadResponse, error) {
