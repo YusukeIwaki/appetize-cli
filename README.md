@@ -39,3 +39,23 @@ data:   1521kwdbrewp8      2018-05-23 01:27:55.617 +0000 UTC
 data:   ymnuvqm545gnc      2018-05-23 01:24:57.485 +0000 UTC
 data:   byxn1f9mpgpwg      2017-10-12 13:23:11.871 +0000 UTC
 ```
+
+### appetize show
+
+```
+$ appetize show 1521kwdbrewp8
+
+PublicKey:      1521kwdbrewp8
+Created:        2018-05-23 01:27:55.617 +0000 UTC
+Updated:        2018-05-23 01:27:55.617 +0000 UTC
+Disabled:       false
+Platform:       android
+VersionCode:    1
+Bundle: com.example.helloworld
+Name:   Hello World
+Note:
+AppVersionName: 1.0
+AppVersionCode: 1
+IconUrl:        https://s3.amazonaws.com/appetizeio-static/icons/uj027erw8z0q8rgbqutpj82j54_icon.png
+ViewUrl:        https://appetize.io/app/1521kwdbrewp8
+```
