@@ -10,9 +10,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-// destroyCmd represents the destroy command
-var destroyCmd = &cobra.Command{
-	Use:   "destroy",
+// deleteCmd represents the delete command
+var deleteCmd = &cobra.Command{
+	Use:   "delete",
 	Short: "Deleting apps",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -40,5 +40,5 @@ var destroyCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(destroyCmd)
+	rootCmd.AddCommand(deleteCmd)
 }
