@@ -16,7 +16,9 @@ type UploadOptions struct {
 	Platform    string
 }
 
-type UploadResponse AppItem
+type UploadResponse struct {
+	*AppItem
+}
 
 // ref: https://appetize.io/docs#direct-uploads
 func (client Client) Upload(options UploadOptions) (*UploadResponse, error) {
