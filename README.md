@@ -27,7 +27,25 @@ NOTE: `platform` and `api_token` can be overridden in executing the appetize com
 ```
 $ appetize upload app-debug.apk
 
-1521kwdbrewp8
+PublicKey:      1521kwdbrewp8
+Created:        2018-05-23 01:27:55.617 +0000 UTC
+Updated:        2018-05-23 01:27:55.617 +0000 UTC
+Platform:       android
+VersionCode:    1
+PublicUrl:      https://appetize.io/app/1521kwdbrewp8
+AppUrl: https://appetize.io/app/1521kwdbrewp8
+ManageUrl:      https://appetize.io/manage/private_tkmvwt9tf5ag9jc
+
+$ appetize upload 1521kwdbrewp8 app-debug.apk
+
+PublicKey:      1521kwdbrewp8
+Created:        2018-05-23 01:27:55.617 +0000 UTC
+Updated:        2018-05-23 16:24:45.792 +0000 UTC
+Platform:       android
+VersionCode:    2
+PublicUrl:      https://appetize.io/app/1521kwdbrewp8
+AppUrl: https://appetize.io/app/1521kwdbrewp8
+ManageUrl:      https://appetize.io/manage/private_tkmvwt9tf5ag9jc
 ```
 
 ### appetize list
