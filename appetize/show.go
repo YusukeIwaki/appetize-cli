@@ -18,6 +18,7 @@ type ShowResponse struct {
 	IconUrl        string `json:iconUrl`
 	Name           string `json:name`
 	Note           string `json:note`
+	LaunchUrl      string `json:launchUrl`
 	Disabled       bool   `json:disabled`
 }
 

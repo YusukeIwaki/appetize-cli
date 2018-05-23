@@ -41,6 +41,7 @@ var showCmd = &cobra.Command{
 		fmt.Printf("AppVersionName:\t%s\n", showResponse.AppVersionName)
 		fmt.Printf("AppVersionCode:\t%s\n", showResponse.AppVersionCode)
 		fmt.Printf("IconUrl:\t%s\n", showResponse.IconUrl)
+		fmt.Printf("LaunchUrl:\t%s\n", showResponse.LaunchUrl)
 		fmt.Printf("ViewUrl:\t%s\n", showResponse.ViewUrl())
 		return nil
 	},
