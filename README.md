@@ -26,4 +26,16 @@ NOTE: `platform` and `api_token` can be overridden in executing the appetize com
 
 ```
 $ appetize upload app-debug.apk
+
+1521kwdbrewp8
+```
+
+### appetize list
+
+```
+$ appetize list
+
+data:   1521kwdbrewp8      2018-05-23 01:27:55.617 +0000 UTC
+data:   ymnuvqm545gnc      2018-05-23 01:24:57.485 +0000 UTC
+data:   byxn1f9mpgpwg      2017-10-12 13:23:11.871 +0000 UTC
 ```
