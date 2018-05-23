@@ -44,7 +44,15 @@ var uploadCmd = &cobra.Command{
 		if err != nil {
 			return errors.Wrap(err, "failed to upload file")
 		}
-		fmt.Println(uploadResponse.PublicKey)
+		fmt.Printf("PublicKey:\t%s\n", uploadResponse.PublicKey)
+		fmt.Printf("Created:\t%s\n", uploadResponse.Created)
+		fmt.Printf("Updated:\t%s\n", uploadResponse.Updated)
+		fmt.Printf("Platform:\t%s\n", uploadResponse.Platform)
+		fmt.Printf("VersionCode:\t%d\n", uploadResponse.VersionCode)
+		fmt.Printf("PublicUrl:\t%s\n", uploadResponse.PublicUrl)
+		fmt.Printf("AppUrl:\t%s\n", uploadResponse.AppUrl)
+		fmt.Printf("ManageUrl:\t%s\n", uploadResponse.ManageUrl)
+
 		return nil
 	},
 }
