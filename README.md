@@ -59,3 +59,13 @@ AppVersionCode: 1
 IconUrl:        https://s3.amazonaws.com/appetizeio-static/icons/uj027erw8z0q8rgbqutpj82j54_icon.png
 ViewUrl:        https://appetize.io/app/1521kwdbrewp8
 ```
+
+### appetize destroy
+
+```
+$ appetize destroy 1521kwdbrewp8 zf98sdbrewp89 byxn1f9mpgpwg
+
+1521kwdbrewp8   OK
+zf98sdbrewp89   error:App not found
+byxn1f9mpgpwg   OK
+```
