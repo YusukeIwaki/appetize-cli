@@ -78,6 +78,26 @@ IconUrl:        https://s3.amazonaws.com/appetizeio-static/icons/uj027erw8z0q8rg
 ViewUrl:        https://appetize.io/app/1521kwdbrewp8
 ```
 
+### appetize update
+
+```
+$ appetize update 1521kwdbrewp8 --disabled=true --note=hogehoge
+
+PublicKey:      1521kwdbrewp8
+Created:        2018-05-23 01:27:55.617 +0000 UTC
+Updated:        2018-05-23 16:24:45.792 +0000 UTC
+Disabled:       true
+Platform:       android
+VersionCode:    2
+Bundle: com.example.helloworld
+Name:   Hello World
+Note:   hogehoge
+AppVersionName: 1.0
+AppVersionCode: 1
+IconUrl:        https://s3.amazonaws.com/appetizeio-static/icons/uj027erw8z0q8rgbqutpj82j54_icon.png
+ViewUrl:        https://appetize.io/app/1521kwdbrewp8
+```
+
 ### appetize delete
 
 ```
