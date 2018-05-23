@@ -16,6 +16,9 @@ var showCmd = &cobra.Command{
 	Short: "Retrieve information for a single app",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if viper.GetString("api_token") == "" {
+			return errors.New("no api token specified")
+		}
 		client := appetize.Client{
 			ApiToken: viper.GetString("api_token"),
 		}

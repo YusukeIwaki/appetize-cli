@@ -17,6 +17,9 @@ var uploadCmd = &cobra.Command{
 	Use:   "upload",
 	Short: "Direct file uploads",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if viper.GetString("api_token") == "" {
+			return errors.New("no api token specified")
+		}
 		client := appetize.Client{
 			ApiToken: viper.GetString("api_token"),
 		}
