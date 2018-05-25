@@ -28,6 +28,9 @@ func (createResponse *CreateResponse) ViewUrl() string {
 
 // ref: https://appetize.io/docs#creating-apps
 func (client *Client) CreateApp(options CreateOptions) (*CreateResponse, error) {
+	if options.Platform == "" {
+		return nil, errors.New("Specify 'platform' argument for creating a new app")
+	}
 	params := map[string]interface{}{}
 	params["url"] = options.Url
 	params["platform"] = options.Platform
