@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/YusukeIwaki/appetize-cli/appetize"
+	"github.com/YusukeIwaki/appetize-cli/optional"
 	"github.com/pkg/errors"
 )
 
@@ -23,14 +24,26 @@ var updateCmd = &cobra.Command{
 			ApiToken: viper.GetString("api_token"),
 		}
 		updateForm := appetize.UpdateForm{}
-		if disabled, _ := cmd.Flags().GetString("disabled"); disabled != "" {
-			updateForm.Disabled = disabled
+		flags := cmd.Flags()
+		if flags.Changed("disabled") {
+			if disabled, err := flags.GetBool("disabled"); err == nil {
+				updateForm.Disabled = optional.NewBool(disabled)
+			}
 		}
-		if note, _ := cmd.Flags().GetString("note"); note != "" {
-			updateForm.Note = note
+		if flags.Changed("timeout") {
+			if timeout, err := flags.GetInt("timeout"); err == nil {
+				updateForm.Timeout = optional.NewInt(timeout)
+			}
 		}
-		if launchUrl, _ := cmd.Flags().GetString("launch-url"); launchUrl != "" {
-			updateForm.LaunchUrl = launchUrl
+		if flags.Changed("note") {
+			if note, err := flags.GetString("note"); err == nil {
+				updateForm.Note = optional.NewString(note)
+			}
+		}
+		if flags.Changed("launch-url") {
+			if launchUrl, err := flags.GetString("launch-url"); err == nil {
+				updateForm.LaunchUrl = optional.NewString(launchUrl)
+			}
 		}
 		options := appetize.UpdateOptions{
 			PublicKey:  args[0],
@@ -44,6 +57,9 @@ var updateCmd = &cobra.Command{
 		fmt.Printf("Created:\t%s\n", updateResponse.Created)
 		fmt.Printf("Updated:\t%s\n", updateResponse.Updated)
 		fmt.Printf("Disabled:\t%t\n", updateResponse.Disabled)
+		if updateResponse.Timeout > 0 {
+			fmt.Printf("Timeout:\t%t\n", updateResponse.Timeout)
+		}
 		fmt.Printf("Platform:\t%s\n", updateResponse.Platform)
 		fmt.Printf("VersionCode:\t%d\n", updateResponse.VersionCode)
 		fmt.Printf("Bundle:\t%s\n", updateResponse.Bundle)
@@ -61,6 +77,7 @@ var updateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(updateCmd)
 	updateCmd.Flags().String("launch-url", "", "specify a deep link to bring your users to a specific location when your app is launched.")
-	updateCmd.Flags().String("disabled", "", "disables streaming for this app. 'true' or 'false'")
+	updateCmd.Flags().Bool("disabled", false, "disables streaming for this app. 'true' or 'false'. (Since appetize API is buggy, we have to always set disabled=true for keeping an app to be disabled.)")
+	updateCmd.Flags().Int("timeout", 0, "the number of seconds to wait until automatically ending the session due to user inactivity. Must be 30, 60, 90, 120, 180, 300 or 600, default is 120")
 	updateCmd.Flags().String("note", "", "a note for your own purposes, will appear on your management dashboard. set 'null' to delete")
 }
