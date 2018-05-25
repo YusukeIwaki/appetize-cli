@@ -48,6 +48,23 @@ AppUrl: https://appetize.io/app/1521kwdbrewp8
 ManageUrl:      https://appetize.io/manage/private_tkmvwt9tf5ag9jc
 ```
 
+### appetize create
+
+```
+$ appetize create https://example.com/files/app-debug.apk
+
+PublicKey:      1521kwdbrewp8
+Created:        2018-05-23 01:27:55.617 +0000 UTC
+Updated:        2018-05-23 01:27:55.617 +0000 UTC
+Platform:       android
+Note:
+LaunchUrl:
+VersionCode:    1
+PublicUrl:      https://appetize.io/app/1521kwdbrewp8
+AppUrl: https://appetize.io/app/1521kwdbrewp8
+ManageUrl:      https://appetize.io/manage/private_tkmvwt9tf5ag9jc
+```
+
 ### appetize list
 
 ```

@@ -50,7 +50,6 @@ var createCmd = &cobra.Command{
 		fmt.Printf("PublicKey:\t%s\n", createResponse.PublicKey)
 		fmt.Printf("Created:\t%s\n", createResponse.Created)
 		fmt.Printf("Updated:\t%s\n", createResponse.Updated)
-		fmt.Printf("Disabled:\t%t\n", createResponse.Disabled)
 		if createResponse.Timeout > 0 {
 			fmt.Printf("Timeout:\t%d\n", createResponse.Timeout)
 		}
