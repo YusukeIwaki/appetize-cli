@@ -10,7 +10,7 @@ type ListOptions struct {
 }
 
 type ListResponse struct {
-	Data []AppItem `json:data`
+	Data []DetailedAppItem `json:data`
 }
 
 // ref: https://appetize.io/docs#listing-apps

@@ -18,10 +18,7 @@ type UploadOptions struct {
 }
 
 type UploadResponse struct {
-	*AppItem
-	PublicUrl string `json:publicURL`
-	AppUrl    string `json:appURL`
-	ManageUrl string `json:manageURL`
+	*CreatedAppItem
 }
 
 // ref: https://appetize.io/docs#direct-uploads

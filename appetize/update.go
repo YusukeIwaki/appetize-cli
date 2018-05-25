@@ -22,16 +22,7 @@ type UpdateForm struct {
 }
 
 type UpdateResponse struct {
-	*AppItem
-	AppVersionCode string `json:appVersionCode`
-	AppVersionName string `json:appVersionName`
-	Bundle         string `json:bundle`
-	IconUrl        string `json:iconUrl`
-	Name           string `json:name`
-	Note           string `json:note`
-	LaunchUrl      string `json:launchUrl`
-	Disabled       bool   `json:disabled`
-	Timeout        int    `json:timeout`
+	*DetailedAppItem
 }
 
 func (updateResponse *UpdateResponse) ViewUrl() string {
