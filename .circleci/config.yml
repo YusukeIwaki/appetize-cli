@@ -14,6 +14,10 @@ jobs:
             go get github.com/spf13/cobra
             go get github.com/spf13/viper
       - run:
+          name: Test optional package
+          command: |
+            go test optional/*
+      - run:
           name: Build for darwin/amd64
           command: |
             mkdir -p out/binary/darwin
