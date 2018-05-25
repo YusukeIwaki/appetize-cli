@@ -36,7 +36,7 @@ var uploadCmd = &cobra.Command{
 			return errors.Wrap(err, fmt.Sprintf("failed to get absolute path for filepath=%s", filePath))
 		}
 		options := appetize.UploadOptions{
-			Platform:    viper.GetString("platform"),
+			Platform:    viper.GetString("upload.platform"),
 			AbsFilePath: filePath,
 			PublicKey:   publicKeyArg,
 		}
@@ -62,5 +62,5 @@ func init() {
 
 	// platform
 	uploadCmd.PersistentFlags().String("platform", "", "'ios' or 'android'")
-	viper.BindPFlag("platform", uploadCmd.PersistentFlags().Lookup("platform"))
+	viper.BindPFlag("upload.platform", uploadCmd.PersistentFlags().Lookup("platform"))
 }

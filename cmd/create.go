@@ -1,50 +1,76 @@
-// Copyright © 2018 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package cmd
 
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/YusukeIwaki/appetize-cli/appetize"
+	"github.com/YusukeIwaki/appetize-cli/optional"
+	"github.com/pkg/errors"
 )
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create called")
+	Short: "Creating Apps",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if viper.GetString("api_token") == "" {
+			return errors.New("no api token specified")
+		}
+		client := appetize.Client{
+			ApiToken: viper.GetString("api_token"),
+		}
+		options := appetize.CreateOptions{
+			Url:      args[0],
+			Platform: viper.GetString("create.platform"),
+		}
+		flags := cmd.Flags()
+		if flags.Changed("timeout") {
+			if timeout, err := flags.GetInt("timeout"); err == nil {
+				options.Timeout = optional.NewInt(timeout)
+			}
+		}
+		if flags.Changed("note") {
+			if note, err := flags.GetString("note"); err == nil {
+				options.Note = optional.NewString(note)
+			}
+		}
+		if flags.Changed("launch-url") {
+			if launchUrl, err := flags.GetString("launch-url"); err == nil {
+				options.LaunchUrl = optional.NewString(launchUrl)
+			}
+		}
+		createResponse, err := client.CreateApp(options)
+		if err != nil {
+			return errors.Wrap(err, "failed to create app")
+		}
+		fmt.Printf("PublicKey:\t%s\n", createResponse.PublicKey)
+		fmt.Printf("Created:\t%s\n", createResponse.Created)
+		fmt.Printf("Updated:\t%s\n", createResponse.Updated)
+		if createResponse.Timeout > 0 {
+			fmt.Printf("Timeout:\t%d\n", createResponse.Timeout)
+		}
+		fmt.Printf("Platform:\t%s\n", createResponse.Platform)
+		fmt.Printf("VersionCode:\t%d\n", createResponse.VersionCode)
+		fmt.Printf("Note:\t%s\n", createResponse.Note)
+		fmt.Printf("LaunchUrl:\t%s\n", createResponse.LaunchUrl)
+		fmt.Printf("PublicUrl:\t%s\n", createResponse.PublicUrl)
+		fmt.Printf("AppUrl:\t%s\n", createResponse.AppUrl)
+		fmt.Printf("ManageUrl:\t%s\n", createResponse.ManageUrl)
+		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(createCmd)
 
-	// Here you will define your flags and configuration settings.
+	createCmd.PersistentFlags().String("platform", "", "'ios' or 'android'")
+	viper.BindPFlag("create.platform", createCmd.PersistentFlags().Lookup("platform"))
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	createCmd.Flags().String("launch-url", "", "specify a deep link to bring your users to a specific location when your app is launched.")
+	createCmd.Flags().Int("timeout", 0, "the number of seconds to wait until automatically ending the session due to user inactivity. Must be 30, 60, 90, 120, 180, 300 or 600, default is 120")
+	createCmd.Flags().String("note", "", "a note for your own purposes, will appear on your management dashboard. set 'null' to delete")
 }

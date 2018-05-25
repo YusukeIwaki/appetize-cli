@@ -11,15 +11,7 @@ type ShowOptions struct {
 }
 
 type ShowResponse struct {
-	*AppItem
-	AppVersionCode string `json:appVersionCode`
-	AppVersionName string `json:appVersionName`
-	Bundle         string `json:bundle`
-	IconUrl        string `json:iconUrl`
-	Name           string `json:name`
-	Note           string `json:note`
-	LaunchUrl      string `json:launchUrl`
-	Disabled       bool   `json:disabled`
+	*DetailedAppItem
 }
 
 func (showResponse *ShowResponse) ViewUrl() string {

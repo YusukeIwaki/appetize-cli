@@ -33,6 +33,9 @@ var showCmd = &cobra.Command{
 		fmt.Printf("Created:\t%s\n", showResponse.Created)
 		fmt.Printf("Updated:\t%s\n", showResponse.Updated)
 		fmt.Printf("Disabled:\t%t\n", showResponse.Disabled)
+		if showResponse.Timeout > 0 {
+			fmt.Printf("Timeout:\t%d\n", showResponse.Timeout)
+		}
 		fmt.Printf("Platform:\t%s\n", showResponse.Platform)
 		fmt.Printf("VersionCode:\t%d\n", showResponse.VersionCode)
 		fmt.Printf("Bundle:\t%s\n", showResponse.Bundle)
