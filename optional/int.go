@@ -21,7 +21,7 @@ func (opt Int) Get() int {
 	if val, err := opt.GetE(); err == nil {
 		return val
 	} else {
-		panic(err.Error())
+		return 0
 	}
 }
 
