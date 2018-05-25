@@ -81,12 +81,13 @@ ViewUrl:        https://appetize.io/app/1521kwdbrewp8
 ### appetize update
 
 ```
-$ appetize update 1521kwdbrewp8 --disabled=true --note=hogehoge
+$ appetize update 1521kwdbrewp8 --disabled=true --note=hogehoge --timeout=30
 
 PublicKey:      1521kwdbrewp8
 Created:        2018-05-23 01:27:55.617 +0000 UTC
 Updated:        2018-05-23 16:24:45.792 +0000 UTC
 Disabled:       true
+Timeout:        30
 Platform:       android
 VersionCode:    2
 Bundle: com.example.helloworld
@@ -97,6 +98,9 @@ AppVersionCode: 1
 IconUrl:        https://s3.amazonaws.com/appetizeio-static/icons/uj027erw8z0q8rgbqutpj82j54_icon.png
 ViewUrl:        https://appetize.io/app/1521kwdbrewp8
 ```
+
+Note that we have to always set `--disabled=true` for keeping an app disabled. 
+Appetize API is a little buggy :(
 
 ### appetize delete
 

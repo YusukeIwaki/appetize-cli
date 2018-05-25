@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 
 	"github.com/pkg/errors"
+
+	"github.com/YusukeIwaki/appetize-cli/optional"
 )
 
 type UpdateOptions struct {
@@ -12,12 +14,11 @@ type UpdateOptions struct {
 	UpdateForm UpdateForm
 }
 
-// 無指定なのかfalseなのかを判定するためにstringにしているが、
-// もっとまともなやり方が何か有る気がする
 type UpdateForm struct {
-	LaunchUrl string
-	Disabled  string
-	Note      string
+	LaunchUrl optional.String
+	Disabled  optional.Bool
+	Timeout   optional.Int
+	Note      optional.String
 }
 
 type UpdateResponse struct {
@@ -30,6 +31,7 @@ type UpdateResponse struct {
 	Note           string `json:note`
 	LaunchUrl      string `json:launchUrl`
 	Disabled       bool   `json:disabled`
+	Timeout        int    `json:timeout`
 }
 
 func (updateResponse *UpdateResponse) ViewUrl() string {
@@ -40,23 +42,32 @@ func (updateResponse *UpdateResponse) ViewUrl() string {
 func (client *Client) UpdateApp(options UpdateOptions) (*UpdateResponse, error) {
 	updateForm := options.UpdateForm
 	params := map[string]interface{}{}
-	if updateForm.Disabled != "" {
-		if updateForm.Disabled == "true" || updateForm.Disabled == "false" {
-			params["disabled"] = updateForm.Disabled
+	if updateForm.Disabled.Present() {
+		params["disabled"] = updateForm.Disabled.Get()
+	}
+	if updateForm.Timeout.Present() {
+		timeout := updateForm.Timeout.Get()
+		acceptableValues := []int{30, 60, 90, 120, 180, 300, 600}
+		for _, acceptable := range acceptableValues {
+			if timeout == acceptable {
+				params["timeout"] = timeout
+			}
 		}
 	}
-	if updateForm.Note != "" {
-		if updateForm.Note == "null" {
+	if updateForm.Note.Present() {
+		note := updateForm.Note.Get()
+		if note == "null" {
 			params["note"] = nil
 		} else {
-			params["note"] = updateForm.Note
+			params["note"] = note
 		}
 	}
-	if updateForm.LaunchUrl != "" {
-		if updateForm.LaunchUrl == "null" {
+	if updateForm.LaunchUrl.Present() {
+		launchUrl := updateForm.LaunchUrl.Get()
+		if launchUrl == "null" {
 			params["launchUrl"] = nil
 		} else {
-			params["launchUrl"] = updateForm.LaunchUrl
+			params["launchUrl"] = launchUrl
 		}
 	}
 	paramsJson, err := json.MarshalIndent(params, "", "   ")
