@@ -58,7 +58,7 @@ var updateCmd = &cobra.Command{
 		fmt.Printf("Updated:\t%s\n", updateResponse.Updated)
 		fmt.Printf("Disabled:\t%t\n", updateResponse.Disabled)
 		if updateResponse.Timeout > 0 {
-			fmt.Printf("Timeout:\t%t\n", updateResponse.Timeout)
+			fmt.Printf("Timeout:\t%d\n", updateResponse.Timeout)
 		}
 		fmt.Printf("Platform:\t%s\n", updateResponse.Platform)
 		fmt.Printf("VersionCode:\t%d\n", updateResponse.VersionCode)
