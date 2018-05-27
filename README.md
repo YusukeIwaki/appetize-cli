@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/YusukeIwaki/appetize-cli.svg?style=svg)](https://circleci.com/gh/YusukeIwaki/appetize-cli)
+
 # (Unofficial) appetize command line tools
 
 [appetize.io](https://appetize.io/) is very useful, and I love it.
