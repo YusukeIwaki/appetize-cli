@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test_build:
     docker:
       - image: circleci/golang:1.8
     working_directory: /go/src/github.com/YusukeIwaki/appetize-cli
@@ -30,3 +30,49 @@ jobs:
       - store_artifacts:
           path: out/binary
           destination: binary
+  release_build:
+    docker:
+      - image: circleci/golang:1.8
+    working_directory: /go/src/github.com/YusukeIwaki/appetize-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            go get github.com/mitchellh/go-homedir
+            go get github.com/pkg/errors
+            go get github.com/spf13/cobra
+            go get github.com/spf13/viper
+      - run:
+          name: Install tools
+          command: |
+            go get -u github.com/mitchellh/gox
+            go get -u github.com/tcnksm/ghr
+      - run:
+          name: Build
+          command: |
+            gox -osarch="darwin/amd64 linux/386 linux/amd64 linux/arm windows/386 windows/amd64" -output="./out/binary/appetize_{{.OS}}_{{.Arch}}" -parallel=2
+      - run:
+          name: GitHub Release
+          command: |
+            ghr -u ${CIRCLE_PROJECT_USERNAME} ${CIRCLE_TAG} out/binary/
+      - store_artifacts:
+          path: out/binary
+          destination: binary
+
+workflows:
+  version: 2
+  un-tagged-build:
+    jobs:
+      - test_build:
+          filters:
+            tags:
+              ignore: /^v[0-9]+(\..*)?/
+  tagged-build:
+    jobs:
+      - release_build:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\..*)?/
