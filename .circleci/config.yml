@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Build
           command: |
-            gox -osarch="darwin/amd64 linux/386 linux/amd64 linux/arm windows/386 windows/amd64" -output="./out/binary/appetize_{{.OS}}_{{.Arch}}" -parallel=2
+            gox -osarch="darwin/amd64 linux/386 linux/amd64 linux/arm windows/386 windows/amd64" -output="./out/binary/{{.OS}}_{{.Arch}}/appetize" -parallel=2
       - store_artifacts:
           path: out/binary
           destination: binary
