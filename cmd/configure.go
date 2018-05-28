@@ -5,13 +5,11 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"strings"
-	"syscall"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	homedir "github.com/mitchellh/go-homedir"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 // configureCmd represents the configure command
@@ -20,38 +18,36 @@ var configureCmd = &cobra.Command{
 	Short: "configure appetize-cli. Configuration will be put ~/.appetize.yml",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if terminal.IsTerminal(syscall.Stdin) {
-			apiTokenPrompt := PromptReader{
-				Instruction:           "Input appetize API token",
-				AdditionalInstruction: "API token can be found at https://appetize.io/docs#request-api-token.",
-				DefaultValue:          viper.GetString("api_token"),
-			}
-			apiToken, _ := apiTokenPrompt.Prompt()
+		apiTokenPrompt := PromptReader{
+			Instruction:           "Input appetize API token",
+			AdditionalInstruction: "API token can be found at https://appetize.io/docs#request-api-token.",
+			DefaultValue:          viper.GetString("api_token"),
+		}
+		apiToken, _ := apiTokenPrompt.Prompt()
 
-			platformPrompt := PromptReader{
-				Instruction:           "Input default 'platform' parameter",
-				AdditionalInstruction: "If you are an Android developer, it would be strongly recommended to set 'android' here.",
-				DefaultValue:          viper.GetString("platform"),
+		platformPrompt := PromptReader{
+			Instruction:           "Input default 'platform' parameter",
+			AdditionalInstruction: "If you are an Android developer, it would be strongly recommended to set 'android' here.",
+			DefaultValue:          viper.GetString("platform"),
+		}
+		platform := ""
+		for {
+			fmt.Println("")
+			newPlatform, _ := platformPrompt.Prompt()
+			if newPlatform == "" || newPlatform == "android" || newPlatform == "ios" {
+				platform = newPlatform
+				break
+			} else {
+				fmt.Println("ERROR: Only 'ios' or 'android' is acceptable", "")
 			}
-			platform := ""
-			for {
-				fmt.Println("")
-				newPlatform, _ := platformPrompt.Prompt()
-				if newPlatform == "" || newPlatform == "android" || newPlatform == "ios" {
-					platform = newPlatform
-					break
-				} else {
-					fmt.Println("ERROR: Only 'ios' or 'android' is acceptable", "")
-				}
-			}
+		}
 
-			yaml := AppetizeYaml{
-				ApiToken: apiToken,
-				Platform: platform,
-			}
-			if err := yaml.Update(); err != nil {
-				return err
-			}
+		yaml := AppetizeYaml{
+			ApiToken: apiToken,
+			Platform: platform,
+		}
+		if err := yaml.Update(); err != nil {
+			return err
 		}
 		return nil
 	},
