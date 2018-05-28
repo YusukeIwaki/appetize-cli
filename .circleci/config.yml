@@ -1,5 +1,22 @@
 version: 2
 jobs:
+  unit_test:
+    docker:
+      - image: circleci/golang:1.8
+    working_directory: /go/src/github.com/YusukeIwaki/appetize-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            go get github.com/mitchellh/go-homedir
+            go get github.com/pkg/errors
+            go get github.com/spf13/cobra
+            go get github.com/spf13/viper
+      - run:
+          name: Test optional package
+          command: |
+            go test optional/*
   test_build:
     docker:
       - image: circleci/golang:1.8
@@ -13,21 +30,15 @@ jobs:
             go get github.com/pkg/errors
             go get github.com/spf13/cobra
             go get github.com/spf13/viper
-            go get golang.org/x/crypto/ssh/terminal
       - run:
-          name: Test optional package
+          name: Install gox
           command: |
-            go test optional/*
+            go get -u github.com/mitchellh/gox
+            go get -u github.com/inconshreveable/mousetrap
       - run:
-          name: Build for darwin/amd64
+          name: Build
           command: |
-            mkdir -p out/binary/darwin
-            GOOS=darwin GOARCH=amd64 go build -o out/binary/darwin/appetize main.go
-      - run:
-          name: Build for linux/amd64
-          command: |
-            mkdir -p out/binary/amd64
-            GOOS=linux GOARCH=amd64 go build -o out/binary/amd64/appetize main.go
+            gox -osarch="darwin/amd64 linux/386 linux/amd64 linux/arm windows/386 windows/amd64" -output="./out/binary/appetize_{{.OS}}_{{.Arch}}" -parallel=2
       - store_artifacts:
           path: out/binary
           destination: binary
@@ -44,7 +55,6 @@ jobs:
             go get github.com/pkg/errors
             go get github.com/spf13/cobra
             go get github.com/spf13/viper
-            go get golang.org/x/crypto/ssh/terminal
       - run:
           name: Install gox
           command: |
@@ -70,6 +80,10 @@ workflows:
   version: 2
   un-tagged-build:
     jobs:
+      - unit_test:
+          filters:
+            tags:
+              ignore: /^v[0-9]+(\..*)?/
       - test_build:
           filters:
             tags:
