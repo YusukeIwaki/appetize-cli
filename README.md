@@ -5,6 +5,19 @@
 [appetize.io](https://appetize.io/) is very useful, and I love it.
 Make it more useful with this cli tool :)
 
+## Install
+
+### via Homebrew
+
+```
+brew tab YusukeIwaki/appetize
+brew install appetize
+```
+
+### Direct Download
+
+from https://github.com/YusukeIwaki/appetize-cli/releases
+
 ## Config (optional)
 
 You can put *default* parameters in `~/.appetize.yml`.
