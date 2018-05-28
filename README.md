@@ -20,7 +20,11 @@ or set enviromental variables as below:
 APPETIZE_API_TOKEN=tok_hogehoge
 ```
 
-NOTE: `platform` and `api_token` can be overridden in executing the appetize command with `--platform` and `--token` parameters.
+### NOTE
+
+* `platform` and `api_token` can be overridden in executing the appetize command with `--platform` and `--token` parameters.
+* appetize.yml can be easily generated with `appetize configure` command :)
+
 
 ## Execute
 
