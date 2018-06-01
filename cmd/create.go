@@ -25,9 +25,14 @@ var createCmd = &cobra.Command{
 		}
 		options := appetize.CreateOptions{
 			Url:      args[0],
-			Platform: viper.GetString("create.platform"),
+			Platform: viper.GetString("platform"),
 		}
 		flags := cmd.Flags()
+		if flags.Changed("platform") {
+			if platform, err := flags.GetString("platform"); err == nil {
+				options.Platform = platform
+			}
+		}
 		if flags.Changed("timeout") {
 			if timeout, err := flags.GetInt("timeout"); err == nil {
 				options.Timeout = optional.NewInt(timeout)
@@ -67,9 +72,7 @@ var createCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(createCmd)
 
-	createCmd.PersistentFlags().String("platform", "", "'ios' or 'android'")
-	viper.BindPFlag("create.platform", createCmd.PersistentFlags().Lookup("platform"))
-
+	createCmd.Flags().String("platform", "", "'ios' or 'android'")
 	createCmd.Flags().String("launch-url", "", "specify a deep link to bring your users to a specific location when your app is launched.")
 	createCmd.Flags().Int("timeout", 0, "the number of seconds to wait until automatically ending the session due to user inactivity. Must be 30, 60, 90, 120, 180, 300 or 600, default is 120")
 	createCmd.Flags().String("note", "", "a note for your own purposes, will appear on your management dashboard. set 'null' to delete")
