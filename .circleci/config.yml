@@ -45,7 +45,7 @@ jobs:
       - run:
           name: Request updating homebrew-appetize repository
           command: |
-            curl -XPOST -u $CIRCLE_API_TOKEN: -d "build_parameters[CIRCLE_JOB]=build_pr" https://circleci.com/api/v1.1/project/github/YusukeIwaki/homebrew-ppetize/tree/master
+            curl -XPOST -u $CIRCLE_API_TOKEN: -d "build_parameters[CIRCLE_JOB]=build_pr" https://circleci.com/api/v1.1/project/github/YusukeIwaki/homebrew-appetize/tree/master
   release_build:
     docker:
       - image: circleci/golang:1.8
@@ -82,7 +82,7 @@ jobs:
       - run:
           name: Request updating homebrew-appetize repository
           command: |
-            curl -XPOST -u $CIRCLE_API_TOKEN: -d "build_parameters[CIRCLE_JOB]=build_pr" https://circleci.com/api/v1.1/project/github/YusukeIwaki/homebrew-ppetize/tree/master
+            curl -XPOST -u $CIRCLE_API_TOKEN: -d "build_parameters[CIRCLE_JOB]=build_pr" https://circleci.com/api/v1.1/project/github/YusukeIwaki/homebrew-appetize/tree/master
 
 workflows:
   version: 2
