@@ -10,9 +10,11 @@ Make it more useful with this cli tool :)
 ### via Homebrew
 
 ```
-brew tab YusukeIwaki/appetize
+brew tap YusukeIwaki/appetize
 brew install appetize
 ```
+
+or simply `brew install YusukeIwaki/appetize/appetize`
 
 ### Direct Download
 
